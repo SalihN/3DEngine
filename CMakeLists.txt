@@ -3,4 +3,4 @@ project(3DEngine)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(3DEngine main.cpp tgaimage.cpp tgaimage.h)
+add_executable(3DEngine main.cpp tgaimage.cpp tgaimage.h parser.cpp parser.h geometry.h geometry.cpp)

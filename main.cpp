@@ -1,8 +1,14 @@
 #include <cmath>
+#include <vector>
+#include <sstream>
 #include "tgaimage.h"
+#include "parser.h"
 
 const TGAColor white = TGAColor(255, 255, 255, 255);
 const TGAColor red   = TGAColor(255, 0,   0,   255);
+
+constexpr int width  = 800; // output image size
+constexpr int height = 800;
 
 void line(int x0, int y0, int x1, int y1, TGAImage &image, TGAColor color) {
     bool steep = false;
@@ -35,13 +41,20 @@ void line(int x0, int y0, int x1, int y1, TGAImage &image, TGAColor color) {
 }
 
 int main(int argc, char** argv) {
-    TGAImage image(100, 100, TGAImage::RGB);
-    for (int i=0; i<1000000; i++) {
-        line(13, 20, 80, 40, image, white);
-        line(20, 13, 40, 80, image, red);
-        line(80, 40, 13, 20, image, red);
+
+    TGAImage image(width, height, TGAImage::RGB);
+
+    auto *parser = new Parser("african_head.obj");
+
+    for(int i = 0; i < parser->nverts(); i++){
+        vec3 v = parser->vert(i);
+        int x0 = (v.x+1.)*width/2.;
+        int y0 = (v.y+1.)*height/2.;
+        image.set(x0, y0, white);
     }
+
     image.flip_vertically(); // i want to have the origin at the left bottom corner of the image
     image.write_tga_file("output.tga");
+
     return 0;
 }
